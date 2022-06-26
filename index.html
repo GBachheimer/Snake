@@ -14,12 +14,12 @@
     </style>
   </head>
   <body onload = "headerSnake()">
-      <div id = "header" class="m-3 p-3 bg-success bg-gradient position-relative rounded-pill">
+      <div id = "header" class = "m-3 p-3 bg-success bg-gradient position-relative rounded-pill">
         <h2 class = "ms-3 d-inline text-warning">SNAKE
         </h2>
         <canvas
             id = "headerCanvas"
-            width = "700"
+            width = "400"
             height = "60"
             class = "position-absolute start-50 top-50 translate-middle">
         </canvas>
@@ -29,6 +29,7 @@
             class = "rounded-pill position-absolute end-0 top-50 translate-middle btn btn-outline-warning">START
         </button>
       </div>
+      <h3 id = "message" class = "text-center position-relative"></h3>
       <canvas
           id = "root"
           width = "600"

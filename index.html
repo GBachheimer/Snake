@@ -7,13 +7,19 @@
     <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src = "script.js"></script>
     <title>Snake</title>
+    <script>
+        window.onload = function() {
+            headerSnake();
+            drawSquare();
+        }
+    </script>
     <style type = "text/css">
         #root {
             border: 5px solid seagreen;
         }
     </style>
   </head>
-  <body onload = "headerSnake(); drawSquare();">
+  <body>
       <div id = "header" class = "m-3 p-3 bg-success bg-gradient position-relative rounded-pill">
         <h2 id = "title" class = "ms-3 d-inline text-warning">SNAKE
         </h2>

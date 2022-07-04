@@ -25,7 +25,7 @@ var headPosition = [160, 280];
 var snakeBody = [];
 var gridSize = 40;
 var direction = 0;
-let time;
+let time = 0;
 var xFood = Math.floor(Math.random() * 15) * gridSize;
 var yFood = Math.floor(Math.random() * 15) * gridSize;
 let snakeLength = 2;

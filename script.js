@@ -36,9 +36,10 @@ let bestScore = 0;
 function drawSquare() {
     const canvas = document.getElementById("root");
     const ctx = canvas.getContext("2d");
+    const snakeHead = new Image();
+    snakeHead.src = "snakeHead.png";
     ctx.clearRect(0, 0, 600, 600);
-    ctx.fillStyle = "gold";
-    drawSnake(ctx);
+    drawSnake(ctx, snakeHead);
     generateFood();
 }
 
@@ -49,9 +50,9 @@ function generateFood() {
         xFood = Math.floor(Math.random() * 15) * gridSize;
         yFood = Math.floor(Math.random() * 15) * gridSize;
     } while (checkFoodCollision());
-    ctx.fillStyle = "crimson";
-    ctx.fillRect(xFood, yFood, gridSize, gridSize);
-    ctx.fillStyle = "gold";
+    const image = new Image();
+    image.src = "apple.png";
+    ctx.drawImage(image, xFood, yFood, gridSize, gridSize);
 }
 
 document.onkeydown = function(event) {
@@ -85,12 +86,9 @@ document.onkeydown = function(event) {
     document.getElementById("message").innerHTML = score;
 }
 
-function drawSnake(ctx) {
+function drawSnake(ctx, snakeHead) {
     snakeBody.push([headPosition[0], headPosition[1]]);
-    ctx.beginPath();
-    ctx.arc(headPosition[0] + (gridSize / 2), headPosition[1] + (gridSize / 2), gridSize / 2, 0, 2 * Math.PI);
-    ctx.fill();
-    //ctx.fillRect(headPosition[0], headPosition[1], gridSize, gridSize);
+    ctx.drawImage(snakeHead, headPosition[0], headPosition[1], gridSize, gridSize);
     if (snakeBody.length > snakeLength) {
         let toRemove = snakeBody.shift();
         ctx.clearRect(toRemove[0], toRemove[1], gridSize, gridSize);
@@ -100,6 +98,8 @@ function drawSnake(ctx) {
 function moveSnake() {
     const canvas = document.getElementById("root");
     const ctx = canvas.getContext("2d");
+    const snakeHead = new Image();
+    snakeHead.src = "snakeHead.png";
     switch (direction) {
         case 3: //left
             headPosition[0] = headPosition[0] - gridSize;
@@ -115,7 +115,7 @@ function moveSnake() {
     }
     eatFood();
     if (checkCollision()) {
-        drawSnake(ctx);
+        drawSnake(ctx, snakeHead);
     } else {
         clearInterval(time);
         direction = 0;
@@ -156,6 +156,9 @@ function checkCollision() {
 
 function checkFoodCollision() {
     let length = snakeBody.length;
+    if (headPosition[0] === xFood && headPosition[1] === yFood) {
+        return false;
+    }
     for (let i = 0; i < length; ++i) {
         if (xFood === snakeBody[i][0] && yFood === snakeBody[i][1]) {
             return true;

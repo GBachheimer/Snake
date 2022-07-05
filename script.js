@@ -1,13 +1,14 @@
 var xHeaderSnake = 100;
 var dxHeaderSnake = 2;
+const image = new Image();
+image.src = "snake.png";
+image.onload = function() { headerSnake(); };
 
 function headerSnake() {
     const canv = document.getElementById("headerCanvas");
     canv.width = document.getElementById("header").offsetWidth;
     canv.height = document.getElementById("header").offsetHeight;
     const cax = canv.getContext("2d");
-    const image = new Image();
-    image.src = "snake.png";
     cax.clearRect(0, 0, 400, 400);
     requestAnimationFrame(headerSnake);
     cax.drawImage(image, xHeaderSnake, 5, 120, 50);
@@ -39,7 +40,7 @@ function drawSquare() {
     const snakeHead = new Image();
     snakeHead.src = "snakeHead.png";
     ctx.clearRect(0, 0, 600, 600);
-    drawSnake(ctx, snakeHead);
+    snakeHead.onload = function() { drawSnake(ctx, snakeHead); };
     generateFood();
 }
 
@@ -52,7 +53,7 @@ function generateFood() {
     } while (checkFoodCollision());
     const image = new Image();
     image.src = "apple.png";
-    ctx.drawImage(image, xFood, yFood, gridSize, gridSize);
+    image.onload = function() { ctx.drawImage(image, xFood, yFood, gridSize, gridSize); };
 }
 
 document.onkeydown = function(event) {

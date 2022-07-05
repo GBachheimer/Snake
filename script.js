@@ -1,27 +1,16 @@
 var xHeaderSnake = 100;
 var dxHeaderSnake = 2;
-var headPosition = [160, 280];
-var snakeBody = [];
-var gridSize = 40;
-var direction = 0;
-let time = 0;
-var xFood = Math.floor(Math.random() * 15) * gridSize;
-var yFood = Math.floor(Math.random() * 15) * gridSize;
-let snakeLength = 2;
-let difficulty = 100;
-let score = 0;
-let bestScore = 0;
-const headerCanvas = document.getElementById("headerCanvas");
-const headerCtx = headerCanvas.getContext("2d");
-const mainCanvas = document.getElementById("root");
-const mainCtx = mainCanvas.getContext("2d");
 
 function headerSnake() {
+    const canv = document.getElementById("headerCanvas");
+    canv.width = document.getElementById("header").offsetWidth;
+    canv.height = document.getElementById("header").offsetHeight;
+    const cax = canv.getContext("2d");
     const image = new Image();
     image.src = "snake.png";
-    headerCtx.clearRect(0, 0, 400, 400);
+    cax.clearRect(0, 0, 400, 400);
     requestAnimationFrame(headerSnake);
-    headerCtx.drawImage(image, xHeaderSnake, 5, 120, 50);
+    cax.drawImage(image, xHeaderSnake, 5, 120, 50);
     if (xHeaderSnake > document.getElementById("header").offsetWidth / 2) {
         dxHeaderSnake = 16;
         dxHeaderSnake = -dxHeaderSnake;
@@ -32,22 +21,38 @@ function headerSnake() {
     xHeaderSnake += dxHeaderSnake;
 }
 
+var headPosition = [160, 280];
+var snakeBody = [];
+var gridSize = 40;
+var direction = 0;
+let time;
+var xFood = Math.floor(Math.random() * 15) * gridSize;
+var yFood = Math.floor(Math.random() * 15) * gridSize;
+let snakeLength = 2;
+let difficulty = 100;
+let score = 0;
+let bestScore = 0;
+
 function drawSquare() {
+    const canvas = document.getElementById("root");
+    const ctx = canvas.getContext("2d");
     const snakeHead = new Image();
     snakeHead.src = "snakeHead.png";
-    mainCtx.clearRect(0, 0, 600, 600);
-    drawSnake(snakeHead);
+    ctx.clearRect(0, 0, 600, 600);
+    drawSnake(ctx, snakeHead);
     generateFood();
 }
 
 function generateFood() {
+    const canvas = document.getElementById("root");
+    const ctx = canvas.getContext("2d");
     do {
         xFood = Math.floor(Math.random() * 15) * gridSize;
         yFood = Math.floor(Math.random() * 15) * gridSize;
     } while (checkFoodCollision());
     const image = new Image();
     image.src = "apple.png";
-    mainCtx.drawImage(image, xFood, yFood, gridSize, gridSize);
+    ctx.drawImage(image, xFood, yFood, gridSize, gridSize);
 }
 
 document.onkeydown = function(event) {
@@ -81,16 +86,18 @@ document.onkeydown = function(event) {
     document.getElementById("message").innerHTML = score;
 }
 
-function drawSnake(snakeHead) {
+function drawSnake(ctx, snakeHead) {
     snakeBody.push([headPosition[0], headPosition[1]]);
-    mainCtx.drawImage(snakeHead, headPosition[0], headPosition[1], gridSize, gridSize);
+    ctx.drawImage(snakeHead, headPosition[0], headPosition[1], gridSize, gridSize);
     if (snakeBody.length > snakeLength) {
         let toRemove = snakeBody.shift();
-        mainCtx.clearRect(toRemove[0], toRemove[1], gridSize, gridSize);
+        ctx.clearRect(toRemove[0], toRemove[1], gridSize, gridSize);
     }
 }
 
 function moveSnake() {
+    const canvas = document.getElementById("root");
+    const ctx = canvas.getContext("2d");
     const snakeHead = new Image();
     snakeHead.src = "snakeHead.png";
     switch (direction) {
@@ -108,7 +115,7 @@ function moveSnake() {
     }
     eatFood();
     if (checkCollision()) {
-        drawSnake(snakeHead);
+        drawSnake(ctx, snakeHead);
     } else {
         clearInterval(time);
         direction = 0;

@@ -1,26 +1,5 @@
 var xHeaderSnake = 100;
 var dxHeaderSnake = 2;
-
-function headerSnake() {
-    const canv = document.getElementById("headerCanvas");
-    canv.width = document.getElementById("header").offsetWidth;
-    canv.height = document.getElementById("header").offsetHeight;
-    const cax = canv.getContext("2d");
-    const image = new Image();
-    image.src = "snake.png";
-    cax.clearRect(0, 0, 400, 400);
-    requestAnimationFrame(headerSnake);
-    cax.drawImage(image, xHeaderSnake, 5, 120, 50);
-    if (xHeaderSnake > document.getElementById("header").offsetWidth / 2) {
-        dxHeaderSnake = 16;
-        dxHeaderSnake = -dxHeaderSnake;
-    } else if (xHeaderSnake < document.getElementById("title").offsetWidth + 50) {
-        dxHeaderSnake = -dxHeaderSnake;
-        dxHeaderSnake = 2;
-    }
-    xHeaderSnake += dxHeaderSnake;
-}
-
 var headPosition = [160, 280];
 var snakeBody = [];
 var gridSize = 40;
@@ -32,27 +11,43 @@ let snakeLength = 2;
 let difficulty = 100;
 let score = 0;
 let bestScore = 0;
+const headerCanvas = document.getElementById("headerCanvas");
+const headerCtx = headerCanvas.getContext("2d");
+const mainCanvas = document.getElementById("root");
+const mainCtx = mainCanvas.getContext("2d");
+
+function headerSnake() {
+    const image = new Image();
+    image.src = "snake.png";
+    headerCtx.clearRect(0, 0, 400, 400);
+    requestAnimationFrame(headerSnake);
+    headerCtx.drawImage(image, xHeaderSnake, 5, 120, 50);
+    if (xHeaderSnake > document.getElementById("header").offsetWidth / 2) {
+        dxHeaderSnake = 16;
+        dxHeaderSnake = -dxHeaderSnake;
+    } else if (xHeaderSnake < document.getElementById("title").offsetWidth + 50) {
+        dxHeaderSnake = -dxHeaderSnake;
+        dxHeaderSnake = 2;
+    }
+    xHeaderSnake += dxHeaderSnake;
+}
 
 function drawSquare() {
-    const canvas = document.getElementById("root");
-    const ctx = canvas.getContext("2d");
     const snakeHead = new Image();
     snakeHead.src = "snakeHead.png";
-    ctx.clearRect(0, 0, 600, 600);
-    drawSnake(ctx, snakeHead);
+    mainCtx.clearRect(0, 0, 600, 600);
+    drawSnake(snakeHead);
     generateFood();
 }
 
 function generateFood() {
-    const canvas = document.getElementById("root");
-    const ctx = canvas.getContext("2d");
     do {
         xFood = Math.floor(Math.random() * 15) * gridSize;
         yFood = Math.floor(Math.random() * 15) * gridSize;
     } while (checkFoodCollision());
     const image = new Image();
     image.src = "apple.png";
-    ctx.drawImage(image, xFood, yFood, gridSize, gridSize);
+    mainCtx.drawImage(image, xFood, yFood, gridSize, gridSize);
 }
 
 document.onkeydown = function(event) {
@@ -86,18 +81,16 @@ document.onkeydown = function(event) {
     document.getElementById("message").innerHTML = score;
 }
 
-function drawSnake(ctx, snakeHead) {
+function drawSnake(snakeHead) {
     snakeBody.push([headPosition[0], headPosition[1]]);
-    ctx.drawImage(snakeHead, headPosition[0], headPosition[1], gridSize, gridSize);
+    mainCtx.drawImage(snakeHead, headPosition[0], headPosition[1], gridSize, gridSize);
     if (snakeBody.length > snakeLength) {
         let toRemove = snakeBody.shift();
-        ctx.clearRect(toRemove[0], toRemove[1], gridSize, gridSize);
+        mainCtx.clearRect(toRemove[0], toRemove[1], gridSize, gridSize);
     }
 }
 
 function moveSnake() {
-    const canvas = document.getElementById("root");
-    const ctx = canvas.getContext("2d");
     const snakeHead = new Image();
     snakeHead.src = "snakeHead.png";
     switch (direction) {
@@ -115,7 +108,7 @@ function moveSnake() {
     }
     eatFood();
     if (checkCollision()) {
-        drawSnake(ctx, snakeHead);
+        drawSnake(snakeHead);
     } else {
         clearInterval(time);
         direction = 0;
